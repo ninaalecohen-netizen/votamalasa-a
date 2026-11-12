@@ -1,0 +1,409 @@
+<title>Malasaña 2040 — Vota</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;600&display=swap">
+
+<style>
+  :root {
+    --cream: #EDE8DF;
+    --black: #0D0D0D;
+    --red: #C8231A;
+    --mid: #6B6560;
+    --bg: var(--cream);
+    --fg: var(--black);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --cream: #1A1915; --black: #EDE8DF; --red: #E0362C; --mid: #9A948E;
+      --bg: #1A1915; --fg: #EDE8DF; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --cream: #1A1915; --black: #EDE8DF; --red: #E0362C; --mid: #9A948E;
+    --bg: #1A1915; --fg: #EDE8DF; color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg); color: var(--fg);
+    font-family: 'Barlow', system-ui, sans-serif;
+    padding-left: max(16px, env(safe-area-inset-left,0px));
+    padding-right: max(16px, env(safe-area-inset-right,0px));
+    padding-block: 0;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0 0 auto;
+    height: env(safe-area-inset-top,0px); background: var(--bg); z-index: 51;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky; top: env(safe-area-inset-top,0px); z-index: 50;
+    background: var(--fg); color: var(--bg);
+    padding: 10px max(16px, env(safe-area-inset-left,0px));
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .header-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 18px; letter-spacing: .04em; text-transform: uppercase;
+  }
+  .live-dot {
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--red);
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); animation: pulse 1.8s infinite; flex-shrink: 0; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  /* ── MAIN ── */
+  main { max-width: 700px; margin: 0 auto; padding-block: 32px 80px; }
+
+  /* ── HERO ── */
+  .hero { padding-block: 32px 40px; border-bottom: 3px solid var(--fg); margin-bottom: 40px; }
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--mid);
+    margin-bottom: 8px;
+  }
+  .hero-title {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+    font-size: clamp(52px, 11vw, 90px); line-height: .95; text-transform: uppercase;
+    letter-spacing: -.01em; margin-bottom: 16px;
+  }
+  .hero-title span { color: var(--red); }
+  .hero-sub {
+    font-size: 14px; color: var(--mid); line-height: 1.6; max-width: 460px;
+    border-left: 3px solid var(--red); padding-left: 14px;
+  }
+
+  /* ── CARD ── */
+  .card { margin-bottom: 32px; border: 2px solid var(--fg); }
+  .card-header {
+    background: var(--fg); color: var(--bg);
+    padding: 10px 16px;
+    display: flex; align-items: baseline; justify-content: space-between;
+  }
+  .card-num {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  }
+  .card-total { font-size: 11px; font-weight: 600; opacity: .6; }
+  .card-q {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+    font-size: clamp(22px, 4vw, 32px); text-transform: uppercase; line-height: 1.1;
+    padding: 16px 16px 20px; letter-spacing: .01em;
+  }
+
+  /* ── OPTIONS ── */
+  .options { display: grid; grid-template-columns: 1fr 1fr; border-top: 2px solid var(--fg); }
+  .opt {
+    padding: 16px; cursor: pointer; border: none;
+    background: none; color: var(--fg); font-family: 'Barlow', sans-serif;
+    text-align: left; transition: background .1s; position: relative;
+  }
+  .opt:first-child { border-right: 2px solid var(--fg); }
+  .opt:hover { background: color-mix(in srgb, var(--fg) 6%, var(--bg)); }
+  .opt-label {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+    font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .opt-label.a { color: var(--red); }
+  .opt-label.b { color: var(--red); }
+  .opt-text {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+    font-size: clamp(18px, 3.5vw, 26px); text-transform: uppercase;
+    line-height: 1.1; margin-bottom: 8px; letter-spacing: .01em;
+  }
+  .opt-sub { font-size: 12px; color: var(--mid); line-height: 1.5; }
+
+  /* voted */
+  .opt.my-vote-a { background: var(--fg); color: var(--bg); }
+  .opt.my-vote-a .opt-sub { color: color-mix(in srgb, var(--bg) 60%, transparent); }
+  .opt.my-vote-b { background: var(--red); color: #fff; }
+  .opt.my-vote-b .opt-label { color: #fff; }
+  .opt.my-vote-b .opt-sub { color: rgba(255,255,255,.65); }
+
+  .voted-tag {
+    display: none; position: absolute; top: 8px; right: 8px;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+    font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+    border: 1.5px solid currentColor; padding: 2px 6px;
+  }
+  .my-vote-a .voted-tag, .my-vote-b .voted-tag { display: block; }
+  .my-vote-a .voted-tag { color: var(--bg); border-color: var(--bg); }
+  .my-vote-b .voted-tag { color: #fff; border-color: #fff; }
+
+  /* ── BAR ── */
+  .bar-wrap { margin-top: 10px; height: 3px; background: color-mix(in srgb, currentColor 20%, transparent); }
+  .bar-fill { height: 100%; transition: width .5s ease; }
+  .my-vote-a .bar-fill { background: var(--bg); }
+  .my-vote-b .bar-fill { background: #fff; }
+  .bar-pct {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+    font-size: 13px; letter-spacing: .04em; margin-top: 4px;
+  }
+
+  /* ── OPEN Q ── */
+  .open-q { padding: 14px 16px; border-top: 2px solid var(--fg); background: color-mix(in srgb, var(--fg) 4%, var(--bg)); }
+  .open-label {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--mid); margin-bottom: 8px;
+  }
+  .open-input {
+    width: 100%; background: var(--bg); border: 1.5px solid var(--fg);
+    padding: 9px 12px; font-family: 'Barlow', sans-serif; font-size: 13px;
+    color: var(--fg); resize: none; outline: none;
+  }
+  .open-input:focus { border-color: var(--red); }
+  .open-submit {
+    margin-top: 8px; padding: 7px 16px;
+    border: 1.5px solid var(--fg); background: var(--fg); color: var(--bg);
+    font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 900;
+    letter-spacing: .1em; text-transform: uppercase;
+    cursor: pointer; transition: opacity .15s;
+  }
+  .open-submit:hover { opacity: .8; }
+  .responses { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; max-height: 160px; overflow-y: auto; }
+  .resp-item {
+    font-size: 12px; color: var(--mid); padding: 6px 10px;
+    border-left: 3px solid var(--red); line-height: 1.5;
+  }
+
+  /* ── CUSTOM ── */
+  .custom-box { border: 2px dashed var(--fg); padding: 20px; margin-bottom: 24px; }
+  .custom-title {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+    font-size: 28px; text-transform: uppercase; letter-spacing: .01em; margin-bottom: 6px;
+  }
+  .custom-sub { font-size: 13px; color: var(--mid); margin-bottom: 14px; line-height: 1.55; }
+  .custom-input {
+    width: 100%; background: var(--bg); border: 1.5px solid var(--fg);
+    padding: 10px 12px; font-family: 'Barlow', sans-serif; font-size: 14px;
+    color: var(--fg); outline: none;
+  }
+  .custom-input:focus { border-color: var(--red); }
+  .custom-ideas { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto; }
+  .idea-item {
+    font-size: 13px; padding: 10px 14px; border-left: 3px solid var(--fg); line-height: 1.5;
+    background: color-mix(in srgb, var(--fg) 4%, var(--bg));
+  }
+
+  .loading { text-align: center; padding: 60px 20px; color: var(--mid); font-size: 14px; }
+
+  @media (max-width: 480px) {
+    .options { grid-template-columns: 1fr; }
+    .opt:first-child { border-right: none; border-bottom: 2px solid var(--fg); }
+  }
+</style>
+
+<header>
+  <span class="header-title">Malasaña 2040 — Vota</span>
+  <div class="live-dot"><span class="dot"></span>En vivo</div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="hero-eyebrow">Madrid · Field Research · IE University</div>
+    <div class="hero-title">Elige<br>la<br><span>medida.</span></div>
+    <div class="hero-sub">Somos estudiantes de IE. Estamos diseñando propuestas para proteger los bares de Malasaña. Dinos qué medida te parece mejor.</div>
+  </div>
+
+  <div id="app"><div class="loading">Cargando...</div></div>
+</main>
+
+<script>
+const QUESTIONS = [
+  {
+    id: 'q1', num: '01',
+    q: 'El bar de tu calle lleva 30 años. No puede pagar el nuevo alquiler.',
+    a: { label: 'Protegerlo', text: 'Congelar su alquiler por ley', sub: 'El Ayuntamiento lo protege. No puede cerrar ni cambiar.' },
+    b: { label: 'No intervenir', text: 'Que el mercado decida', sub: 'Si no es rentable, cierra como cualquier negocio.' },
+    openQ: ''
+  },
+  {
+    id: 'q2', num: '02',
+    q: 'El local del bar sale a la venta. ¿Quién puede comprarlo primero?',
+    a: { label: 'El barrio primero', text: 'Los vecinos tienen prioridad', sub: 'Pueden comprarlo antes que cualquier inversor.' },
+    b: { label: 'El mejor postor', text: 'Quien pague más', sub: 'Sin restricciones. Venta libre.' },
+    openQ: ''
+  },
+  {
+    id: 'q3', num: '03',
+    q: 'Un bar del barrio se hace viral en TikTok y se llena de turistas.',
+    a: { label: 'Que lo aproveche', text: 'Más clientes, más dinero', sub: 'Así puede pagar el alquiler y seguir abierto.' },
+    b: { label: 'Poner límites', text: 'Cupo máximo de visitantes', sub: 'El Ayuntamiento limita el turismo para mantener el ambiente.' },
+    openQ: ''
+  },
+  {
+    id: 'q4', num: '04',
+    q: 'El Ayuntamiento quiere salvar los bares. ¿Qué debería hacer?',
+    a: { label: 'Comprar el local', text: 'La ciudad es el dueño', sub: 'Elige quién lo lleva y pone el precio. Como en París.' },
+    b: { label: 'Dar ayudas', text: 'Dinero directo al bar', sub: 'El bar sigue siendo privado pero recibe apoyo.' },
+    openQ: ''
+  },
+  {
+    id: 'q5', num: '05',
+    q: 'El bar no llega a fin de mes con la caña a €2. ¿Qué hacemos?',
+    a: { label: 'Regular el precio', text: 'Caña a €2 por ley', sub: 'El Estado cubre la diferencia con una subvención.' },
+    b: { label: 'Dejar subir el precio', text: 'Caña a lo que toque', sub: 'El bar cobra lo que necesita para sobrevivir.' },
+    openQ: ''
+  },
+  {
+    id: 'q6', num: '06',
+    q: '¿Quién decide si un bar merece protección oficial?',
+    a: { label: 'Los vecinos', text: 'Voto del barrio', sub: 'Quien vive aquí decide qué vale la pena proteger.' },
+    b: { label: 'El Ayuntamiento', text: 'Requisitos oficiales', sub: 'Años abierto, tipo de negocio, precio de la caña.' },
+    openQ: ''
+  },
+  {
+    id: 'q7', num: '07',
+    q: 'El dueño se jubila. No tiene familia que lo continúe.',
+    a: { label: 'Traspaso protegido', text: 'El Ayuntamiento busca relevo', sub: 'Solo puede pasar a otro bar de barrio.' },
+    b: { label: 'Libre elección', text: 'El dueño vende a quien quiera', sub: 'Puede convertirse en lo que sea.' },
+    openQ: ''
+  },
+  {
+    id: 'q8', num: '08',
+    q: 'Proteger los bares cuesta dinero. ¿Quién debería pagar?',
+    a: { label: 'Los turistas', text: 'Tasa a Airbnb y hoteles', sub: 'Quien gentrifica el barrio, que pague para protegerlo.' },
+    b: { label: 'Todos', text: 'Presupuesto del Ayuntamiento', sub: 'Es un bien del barrio. Lo pagamos entre todos.' },
+    openQ: ''
+  }
+];
+
+let db, user, myVotes = {}, openAnswers = {};
+
+async function init() {
+  try {
+    const userCap = await claude.use('user');
+    const dbCap = await claude.use('db');
+    db = dbCap; user = userCap;
+  } catch(e) {}
+  render(); subscribeAll();
+}
+
+function render() {
+  document.getElementById('app').innerHTML = QUESTIONS.map(cardHTML).join('') + customHTML();
+}
+
+function cardHTML(q) {
+  const qv = (window._votes||{})[q.id] || {a:0,b:0};
+  const total = qv.a + qv.b;
+  const pctA = total ? Math.round(qv.a/total*100) : 50;
+  const pctB = total ? Math.round(qv.b/total*100) : 50;
+  const mv = myVotes[q.id];
+  const answered = !!mv;
+
+  return `<div class="card" id="card-${q.id}">
+    <div class="card-header">
+      <span class="card-num">Pregunta ${q.num}</span>
+      <span class="card-total">${total > 0 ? total + (total===1?' voto':' votos') : ''}</span>
+    </div>
+    <div class="card-q">${q.q}</div>
+    <div class="options">
+      <button class="opt ${mv==='a'?'my-vote-a':''}" onclick="vote('${q.id}','a')" ${answered&&mv!=='a'?'style="opacity:.45"':''}>
+        <div class="opt-label a">${q.a.label}</div>
+        <div class="opt-text">${q.a.text}</div>
+        <div class="opt-sub">${q.a.sub}</div>
+        ${answered?`<div class="bar-wrap"><div class="bar-fill" style="width:${pctA}%"></div></div><div class="bar-pct">${pctA}%</div>`:''}
+        <span class="voted-tag">Tu voto</span>
+      </button>
+      <button class="opt ${mv==='b'?'my-vote-b':''}" onclick="vote('${q.id}','b')" ${answered&&mv!=='b'?'style="opacity:.45"':''}>
+        <div class="opt-label b">${q.b.label}</div>
+        <div class="opt-text">${q.b.text}</div>
+        <div class="opt-sub">${q.b.sub}</div>
+        ${answered?`<div class="bar-wrap"><div class="bar-fill" style="width:${pctB}%"></div></div><div class="bar-pct">${pctB}%</div>`:''}
+        <span class="voted-tag">Tu voto</span>
+      </button>
+    </div>
+  </div>`;
+}
+
+function openQHTML(q) { return ''; }
+
+function customHTML() {
+  const ideas = window._ideas||[];
+  return `<div class="custom-box">
+    <div class="custom-title">Tu idea</div>
+    <div class="custom-sub">¿Tienes otra propuesta para proteger los bares de Malasaña en 2040?</div>
+    <input class="custom-input" id="custom-input" type="text" placeholder="Escribe tu medida...">
+    <button class="open-submit" style="margin-top:10px" onclick="submitIdea()">Proponer</button>
+    ${ideas.length>0?`<div class="custom-ideas">${ideas.slice(-8).map(i=>`<div class="idea-item">${i}</div>`).join('')}</div>`:''}
+  </div>`;
+}
+
+async function vote(qid, side) {
+  if (myVotes[qid]) return;
+  myVotes[qid] = side;
+  if (!window._votes) window._votes = {};
+  if (!window._votes[qid]) window._votes[qid] = {a:0,b:0};
+  window._votes[qid][side]++;
+  rerender(qid);
+  if (db) {
+    try {
+      await db.doc('votes/'+qid).update({[side]:db.increment(1)}).catch(()=>
+        db.doc('votes/'+qid).set({a:side==='a'?1:0,b:side==='b'?1:0})
+      );
+    } catch(e){}
+  }
+}
+
+async function submitOpen(qid) {
+  const el = document.getElementById('open-'+qid);
+  if (!el) return;
+  const val = el.value.trim(); if (!val) return;
+  openAnswers[qid] = val;
+  if (!window._responses) window._responses = {};
+  if (!window._responses[qid]) window._responses[qid] = [];
+  window._responses[qid].push(val);
+  rerender(qid);
+  if (db) { try { await db.doc('responses/'+qid+'/items/'+Date.now()).set({text:val,t:Date.now()}); } catch(e){} }
+}
+
+async function submitIdea() {
+  const el = document.getElementById('custom-input');
+  if (!el) return;
+  const val = el.value.trim(); if (!val) return;
+  el.value = '';
+  if (!window._ideas) window._ideas = [];
+  window._ideas.push(val);
+  rerenderCustom();
+  if (db) { try { await db.doc('ideas/'+Date.now()).set({text:val,t:Date.now()}); } catch(e){} }
+}
+
+function rerender(qid) {
+  const q = QUESTIONS.find(x=>x.id===qid);
+  const card = document.getElementById('card-'+qid);
+  if (q && card) card.outerHTML = cardHTML(q);
+}
+function rerenderCustom() {
+  const el = document.querySelector('.custom-box');
+  if (el) el.outerHTML = customHTML();
+}
+
+function subscribeAll() {
+  if (!db) return;
+  QUESTIONS.forEach(q => {
+    db.doc('votes/'+q.id).onSnapshot(snap => {
+      if (!snap.exists) return;
+      if (!window._votes) window._votes = {};
+      window._votes[q.id] = snap.data();
+      if (myVotes[q.id]) rerender(q.id);
+    });
+    db.collection('responses/'+q.id+'/items').orderBy('t').onSnapshot(snap => {
+      if (!window._responses) window._responses = {};
+      window._responses[q.id] = snap.docs.map(d=>d.data().text).filter(Boolean);
+      if (myVotes[q.id]) rerender(q.id);
+    });
+  });
+  db.collection('ideas').orderBy('t').onSnapshot(snap => {
+    window._ideas = snap.docs.map(d=>d.data().text).filter(Boolean);
+    rerenderCustom();
+  });
+}
+
+init();
+</script>
